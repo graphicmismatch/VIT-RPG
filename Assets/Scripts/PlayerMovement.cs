@@ -3,7 +3,7 @@ using UnityEngine.InputSystem;
 public class PlayerMovement : MonoBehaviour
 {
     protected Vector2 movement;
-    private Vector2 direction;
+    public Vector2 direction;
     private Rigidbody2D rb;
     private float centeringTimer;
     private bool centering;
@@ -40,27 +40,30 @@ public class PlayerMovement : MonoBehaviour
             }
             if (feasibleCenteringPath)
             {
-                
+
                 this.transform.position = Vector2.Lerp(centeringOrigin, centeringTarget, centeringTimer / centeringTime);
-               
+
             }
             if (centeringTimer <= centeringTime)
             {
                 centeringTimer += Time.deltaTime;
             }
         }
-        else {
+        else
+        {
             centering = false;
             centeringTimer = 0;
         }
     }
-    public void OnMove(InputValue ctx) {
+    public void OnMove(InputValue ctx)
+    {
         if (ctx.Get() != null)
         {
             direction = ((Vector2)ctx.Get());
             movement = ((Vector2)ctx.Get()).normalized;
         }
-        else {
+        else
+        {
             movement = Vector2.zero;
         }
     }
