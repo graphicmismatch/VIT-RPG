@@ -1,18 +1,55 @@
 using UnityEngine;
 
-public class playerValues: MonoBehaviour{
+
+public class savedPlayerValues
+{
     public string playerName;
     public Vector3 playerPosition;
     public float playerHealth;
     public int worldId;
-    public static float movementSpeed;
-    
+    public Stats stats;
 
-    public void Start(){
+}
+public struct Stats
+{
+    public float MaxHealth;
+    public float Atk;
+    public float Def;
+    public float Spd;
+    public float InventorySpace;
+}
+public class playerValues : MonoBehaviour
+{
+    public string playerName;
+    public float playerHealth;
+    public int worldId;
+    public Stats stats;
+    public static playerValues inst;
+    private void Awake()
+    {
+        inst = this;
+    }
+    public void Start()
+    {
         playerName = null;
-        playerPosition = new Vector3(0, 0, 0);
         playerHealth = 100;
         worldId = 0;
-        movementSpeed = 5.0f;
+    }
+
+    public void AddStats(StatChange sc)
+    {
+        stats.MaxHealth += sc.MaxHealth;
+        stats.Atk += sc.Atk;
+        stats.Def += sc.Def;
+        stats.Spd += sc.InventorySpace;
+        stats.InventorySpace += sc.InventorySpace;
+    }
+    public void RemoveStats(StatChange sc)
+    {
+        stats.MaxHealth -= sc.MaxHealth;
+        stats.Atk -= sc.Atk;
+        stats.Def -= sc.Def;
+        stats.Spd -= sc.InventorySpace;
+        stats.InventorySpace -= sc.InventorySpace;
     }
 }
