@@ -1,14 +1,21 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-[System.Serializable]
-public struct Item {
-    public string Name;
-    public StatChange effects;
-    public bool equippable;
+
+public enum itemInteraction { 
+    USEANDTHROW,USEANDKEEP,EQUIPPABLE
 }
 [System.Serializable]
-public struct StatChange {
+public struct Item
+{
+    public string Name;
+    public StatChange effects;
+    public itemInteraction itemInt;
+    public bool KeyItem;
+}
+[System.Serializable]
+public struct StatChange
+{
     public float MaxHealth;
     public float Atk;
     public float Def;
@@ -29,25 +36,38 @@ public class InventoryManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
-    }
-    public void AddItem(Item i)
-    {
 
-        inventory.Add(i);
     }
-    public void AddItem(Item i,int n)
+    public bool AddItem(Item i)
+    {
+        if (inventory.Count >= playerValues.inst.stats.InventorySpace) {
+            return false;
+        }
+        inventory.Add(i);
+        return true;
+    }
+    public int AddItem(Item i, int n)
     {
         for (int j = 0; j < n; j++)
         {
+            if (inventory.Count >= playerValues.inst.stats.InventorySpace)
+            {
+                return j;
+            }
             inventory.Add(i);
         }
+        return n;
     }
-    public void EqwipItem(Item i) {
+    public bool EqwipItem(Item i)
+    {
+        if (i.itemInt != itemInteraction.EQUIPPABLE) {
+            return false;
+        }
         equipped.Add(i);
         inventory.Remove(i);
 
         playerValues.inst.AddStats(i.effects);
+        return true;
     }
     public void UnequipItem(Item i)
     {
@@ -57,12 +77,26 @@ public class InventoryManager : MonoBehaviour
         playerValues.inst.RemoveStats(i.effects);
     }
 
-    public void ThrowItem(Item i) {
-        inventory.Remove(i);
-    }
-    public void UseItem(Item i)
+    public bool ThrowItem(Item i)
     {
-        playerValues.inst.AddStats(i.effects);
+        if (i.KeyItem)
+        {
+            return false;
+        }
         inventory.Remove(i);
+        return true;
+    }
+    public bool UseItem(Item i)
+    {
+        if (i.itemInt != itemInteraction.USEANDKEEP&&i.itemInt != itemInteraction.USEANDTHROW)
+        {
+            return false;
+        }
+        playerValues.inst.AddStats(i.effects);
+        if (i.itemInt == itemInteraction.USEANDTHROW)
+        {
+            inventory.Remove(i);
+        }
+        return true;
     }
 }
