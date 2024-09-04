@@ -7,6 +7,7 @@ public class attack : MonoBehaviour
     public Transform attacker;
     public float damage = 10f;
     public float range = 5f;
+    public LayerMask Enemy;
     // Update is called once per frame
     void Update()
     {
@@ -19,7 +20,7 @@ public class attack : MonoBehaviour
 
     void doattack()
     {
-        RaycastHit2D hit = Physics2D.Raycast(attacker.position, playerMovement.direction, range);
+        RaycastHit2D hit = Physics2D.Raycast(attacker.position, playerMovement.direction, range,Enemy);
         Debug.Log(hit);
         if (hit.collider != null)
         {
