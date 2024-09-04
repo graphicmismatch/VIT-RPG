@@ -8,6 +8,7 @@ public class attack : MonoBehaviour
     public float damage = 10f;
     public float range = 5f;
     public LayerMask Enemy;
+    public Animator anim;
     // Update is called once per frame
     void Update()
     {
@@ -20,6 +21,7 @@ public class attack : MonoBehaviour
 
     void doattack()
     {
+        anim.SetTrigger("Atk");
         RaycastHit2D hit = Physics2D.Raycast(attacker.position, playerMovement.direction, range,Enemy);
         Debug.Log(hit);
         if (hit.collider != null)
@@ -28,5 +30,6 @@ public class attack : MonoBehaviour
             Target target = hit.transform.GetComponent<Target>();
             target.TakeDamage(damage);
         }
+        //anim.ResetTrigger("Atk");
     }
 }
