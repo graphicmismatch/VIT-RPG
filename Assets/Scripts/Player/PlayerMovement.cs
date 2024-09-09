@@ -15,13 +15,15 @@ public class PlayerMovement : MonoBehaviour
     public float speed;
     public LayerMask wallLayers;
     public float centeringTime;
-
+    public static Vector3 position;
+    public static PlayerMovement inst;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         centeringTimer = 0f;
         centering = false;
         rb = GetComponent<Rigidbody2D>();
+        inst = this;
     }
 
     // Update is called once per frame
@@ -57,6 +59,7 @@ public class PlayerMovement : MonoBehaviour
         anim.SetFloat("DirX", direction.x);
         anim.SetFloat("DirY", direction.y);
         anim.SetBool("moving", rb.velocity.SqrMagnitude()>0);
+        position = this.transform.position;
     }
     public void OnMove(InputValue ctx)
     {

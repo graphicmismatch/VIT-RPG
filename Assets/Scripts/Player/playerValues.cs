@@ -35,7 +35,10 @@ public class playerValues : MonoBehaviour
         playerHealth = 100;
         worldId = 0;
     }
-
+    public static void takeAttack(float health) {
+        inst.playerHealth -= 1+((health)*((100-inst.stats.Def)/100));
+        CameraShake.sc.shake(0.5f);
+    }
     public void AddStats(StatChange sc)
     {
         stats.MaxHealth += sc.MaxHealth;

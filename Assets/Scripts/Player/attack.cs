@@ -9,6 +9,8 @@ public class attack : MonoBehaviour
     public float range = 5f;
     public LayerMask Enemy;
     public Animator anim;
+    public string[] TargetTags;
+
     // Update is called once per frame
     void Update()
     {
@@ -26,10 +28,25 @@ public class attack : MonoBehaviour
         Debug.Log(hit);
         if (hit.collider != null)
         {
-            Debug.Log("HIT");
-            Target target = hit.transform.GetComponent<Target>();
-            target.TakeDamage(damage);
+            if (checkTags(hit.collider.tag, TargetTags))
+            {
+                Debug.Log("HIT");
+                Target target = hit.transform.GetComponent<Target>();
+                target.TakeDamage(damage);
+            }
+            else if (hit.collider.tag == "Projectile") {
+                ProjectileBehaviour target = hit.transform.GetComponent<ProjectileBehaviour>();
+                target.onHit(PlayerMovement.inst.direction);
+            }
         }
         //anim.ResetTrigger("Atk");
+    }
+    private bool checkTags(string s, string[] tags) {
+        foreach (string p in tags) {
+            if (s == p) {
+                return true;
+            }
+        }
+        return false;
     }
 }

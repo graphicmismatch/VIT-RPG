@@ -13,7 +13,7 @@ public class CameraMove : MonoBehaviour
         mainCamera = Camera.main;
     }
 
-    void Update()
+    void LateUpdate()
     {
         // Get the player's position in viewport coordinates (0 to 1)
         Vector3 viewPos = mainCamera.WorldToViewportPoint(target.position);
